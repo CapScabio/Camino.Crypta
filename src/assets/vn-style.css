@@ -1,0 +1,606 @@
+/* Camino a La Crypta - Visual Novel Styling (vn-style.css) */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg-dark: #060913;
+  --bg-panel: rgba(10, 15, 30, 0.82);
+  --border-color: rgba(0, 240, 255, 0.3);
+  --accent-cyan: #00f0ff;
+  --accent-btc: #f7931a;
+  --accent-red: #ff0055;
+  --accent-green: #00ff66;
+  --text-light: #f0f4ff;
+  --text-muted: #8fa0c5;
+  
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  
+  --glow-cyan: 0 0 15px rgba(0, 240, 255, 0.5);
+  --glow-btc: 0 0 15px rgba(247, 147, 26, 0.5);
+  --glow-red: 0 0 15px rgba(255, 0, 85, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Main Container */
+.vn-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background-color: var(--bg-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Aspect Ratio Frame (16:9) */
+.vn-frame {
+  width: 100%;
+  height: 100%;
+  max-width: 1280px;
+  max-height: 720px;
+  position: relative;
+  background-color: #000;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1281px) {
+  .vn-frame {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Background Scene */
+.vn-scene {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.6s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Ambient Vignette Overlay */
+.vn-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, transparent 40%, rgba(3, 5, 12, 0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vn-overlay.panic {
+  animation: flashRed 1s infinite alternate;
+  background: radial-gradient(circle, transparent 30%, rgba(255, 0, 85, 0.6) 100%);
+  z-index: 2;
+}
+
+/* Dialogue Box */
+.vn-dialog-box {
+  position: absolute;
+  bottom: 24px;
+  left: 5%;
+  width: 90%;
+  height: 160px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--glow-cyan), inset 0 0 20px rgba(0, 240, 255, 0.05);
+  z-index: 10;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.vn-dialog-box:hover {
+  border-color: rgba(0, 240, 255, 0.7);
+}
+
+.vn-dialog-box.satoshi-glow {
+  border-color: rgba(247, 147, 26, 0.5);
+  box-shadow: var(--glow-btc);
+}
+
+.vn-dialog-name {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--accent-cyan);
+  margin-bottom: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+}
+
+.vn-dialog-box.satoshi-glow .vn-dialog-name {
+  color: var(--accent-btc);
+  text-shadow: 0 0 5px rgba(247, 147, 26, 0.5);
+}
+
+.vn-dialog-text {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-light);
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Arrow indicator to continue */
+.vn-next-indicator {
+  position: absolute;
+  bottom: 12px;
+  right: 20px;
+  font-size: 1.2rem;
+  color: var(--accent-cyan);
+  animation: bounceDown 0.8s infinite alternate;
+}
+
+.vn-dialog-box.satoshi-glow .vn-next-indicator {
+  color: var(--accent-btc);
+}
+
+/* Character Sprites Area */
+.vn-sprites-container {
+  width: 100%;
+  height: 70%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding-bottom: 20px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.vn-sprite {
+  height: 85%;
+  max-width: 320px;
+  object-fit: contain;
+  transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  filter: brightness(0.9);
+}
+
+.vn-sprite.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: brightness(1.05);
+}
+
+.vn-sprite.talking {
+  animation: talkBob 0.8s infinite alternate;
+}
+
+/* Choice Buttons Overlay */
+.vn-choices-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(3, 5, 12, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  z-index: 12;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.vn-choice-btn {
+  width: 80%;
+  max-width: 500px;
+  background: rgba(10, 18, 38, 0.9);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 8px;
+  padding: 16px 20px;
+  color: var(--text-light);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: left;
+}
+
+.vn-choice-btn:hover {
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.15) 0%, rgba(10, 18, 38, 0.9) 100%);
+  border-color: var(--accent-cyan);
+  transform: translateX(8px);
+  box-shadow: var(--glow-cyan);
+}
+
+.vn-choice-btn.satoshi {
+  border-color: var(--accent-btc);
+}
+
+.vn-choice-btn.satoshi:hover {
+  background: linear-gradient(90deg, rgba(247, 147, 26, 0.15) 0%, rgba(10, 18, 38, 0.9) 100%);
+  border-color: var(--accent-btc);
+  box-shadow: var(--glow-btc);
+}
+
+/* Simulated Minigame: Exchange */
+.exch-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #020409;
+  display: flex;
+  flex-direction: column;
+  z-index: 11;
+  padding: 20px;
+}
+
+.exch-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 0, 85, 0.3);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.exch-title {
+  font-family: var(--font-mono);
+  color: var(--accent-red);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.exch-alert {
+  background: rgba(255, 0, 85, 0.2);
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  animation: blinkRed 0.6s infinite alternate;
+}
+
+.exch-body {
+  display: flex;
+  flex-grow: 1;
+  gap: 20px;
+}
+
+.exch-chart-area {
+  flex-grow: 2;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.exch-ticker-info {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.exch-price {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent-red);
+}
+
+.exch-stats {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  gap: 12px;
+}
+
+.exch-stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.exch-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.exch-stat-val {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  margin-top: 4px;
+}
+
+.exch-btn {
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+}
+
+.exch-btn:hover {
+  background: #ff2277;
+  transform: translateY(-2px);
+  box-shadow: var(--glow-red);
+}
+
+.exch-btn:active {
+  transform: translateY(0);
+}
+
+/* Simulated Minigame: Lightning Wallet */
+.wallet-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #030611;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
+  padding: 20px;
+}
+
+.phone-shell {
+  width: 320px;
+  height: 520px;
+  background: #0c1020;
+  border: 4px solid #1a223f;
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.phone-screen {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px 16px;
+  overflow-y: auto;
+}
+
+.phone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+}
+
+.wallet-balance-card {
+  background: linear-gradient(135deg, rgba(247, 147, 26, 0.12) 0%, rgba(12, 16, 32, 0.8) 100%);
+  border: 1px solid rgba(247, 147, 26, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.wallet-balance-val {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-btc);
+  margin-top: 4px;
+}
+
+.wallet-scan-box {
+  border: 2px dashed var(--accent-cyan);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  background: rgba(0, 240, 255, 0.02);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.wallet-scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-cyan);
+  top: 0;
+  left: 0;
+  box-shadow: 0 0 8px var(--accent-cyan);
+  animation: scanLine 2s infinite linear;
+}
+
+.wallet-invoice-info {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.wallet-success-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.wallet-success-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(0, 255, 102, 0.15);
+  border: 2px solid var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: var(--accent-green);
+  margin-bottom: 20px;
+  animation: popScale 0.4s ease-out;
+}
+
+/* Action Screens: Main Menu, Game Over */
+.screen-panel {
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 7, 15, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.title-screen {
+  background: linear-gradient(rgba(5, 7, 15, 0.6) 0%, rgba(5, 7, 15, 0.95) 100%), 
+              url('https://i.imgur.com/zYPto7C.png'); /* Fallback pattern */
+  background-size: cover;
+  background-position: center;
+}
+
+.title-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title-logo {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-btc) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.title-sub {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  letter-spacing: 4px;
+}
+
+.menu-btn {
+  width: 240px;
+  background: linear-gradient(135deg, rgba(16, 24, 48, 0.8) 0%, rgba(26, 38, 76, 0.8) 100%);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: var(--text-light);
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: all 0.25s ease;
+}
+
+.menu-btn:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  transform: scale(1.05);
+}
+
+.menu-btn.primary {
+  border-color: var(--accent-btc);
+  color: #fff;
+  background: rgba(247, 147, 26, 0.15);
+}
+
+.menu-btn.primary:hover {
+  border-color: var(--accent-btc);
+  box-shadow: var(--glow-btc);
+}
+
+/* Animations */
+@keyframes flashRed {
+  0% { opacity: 0.1; }
+  100% { opacity: 0.4; }
+}
+
+@keyframes blinkRed {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+@keyframes bounceDown {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(6px); }
+}
+
+@keyframes talkBob {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-4px) scale(1.01); }
+}
+
+@keyframes scanLine {
+  0% { top: 0%; }
+  100% { top: 100%; }
+}
+
+@keyframes popScale {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

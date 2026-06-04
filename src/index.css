@@ -1,0 +1,11 @@
+@import "./assets/vn-style.css";
+
+#root {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  border: none !important;
+  display: block !important;
+  padding: 0 !important;
+}
