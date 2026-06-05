@@ -235,6 +235,7 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
           <DialogBox
             speaker={currentNode.speaker}
             text={currentNode.text}
+            character={currentNode.character}
             isSatoshiNode={currentNode.isSatoshiNode}
             onAdvance={handleAdvance}
           />
