@@ -26,7 +26,7 @@ export const WalletSim: React.FC<WalletSimProps> = ({ onComplete }) => {
       audio.playBeep(440 + count * 100, 0.05, 'triangle');
       if (count >= 3) {
         clearInterval(interval);
-        setBalance(prev => prev - 8001); // 8000 sats + 1 sat fee
+        setBalance(prev => prev - 4501); // 4500 sats + 1 sat fee
         setStep('success');
         audio.playSuccess();
       }
@@ -73,7 +73,7 @@ export const WalletSim: React.FC<WalletSimProps> = ({ onComplete }) => {
               <div className="wallet-invoice-info">
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Monto:</span>
-                  <span style={{ fontWeight: 'bold', color: 'var(--text-light)' }}>8,000 sats</span>
+                  <span style={{ fontWeight: 'bold', color: 'var(--text-light)' }}>4,500 sats</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Destinatario:</span>
@@ -124,7 +124,7 @@ export const WalletSim: React.FC<WalletSimProps> = ({ onComplete }) => {
                 ¡Pago Confirmado!
               </h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: '1.4' }}>
-                Se enviaron 8,000 sats a <span style={{ color: 'var(--text-light)' }}>valeria_cafe@lnurl</span> instantáneamente.
+                Se enviaron 4,500 sats a <span style={{ color: 'var(--text-light)' }}>valeria_cafe@lnurl</span> instantáneamente.
               </p>
               
               <div style={{

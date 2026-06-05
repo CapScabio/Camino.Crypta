@@ -32,7 +32,6 @@ export const characters = {
   system: 'Sistema',
 };
 
-// Background Image names (keys to generate or load)
 export const backgrounds = {
   exchange: 'exchange_room',
   dream: 'dream_satoshi',
@@ -40,15 +39,16 @@ export const backgrounds = {
   cryptaDoor: 'la_crypta_door',
   cryptaInterior: 'la_crypta_interior',
   gameover: 'game_over_scene',
+  victory: 'victory_scene',
 };
 
 export const script: Record<string, ScriptNode> = {
-  // --- CAPÍTULO 1 ---
+  // --- CAPÍTULO 1: El Espejismo del Fomo ---
   c1_start: {
     id: 'c1_start',
     chapter: 1,
     speaker: characters.narrator,
-    text: 'Año 2026. Nico es un joven trader atrapado en el frenesí de los mercados cripto. Sentado frente a tres monitores, busca desesperadamente dar el golpe de su vida.',
+    text: 'Son las 3:15 AM. Tus ojos están inyectados en sangre pero no podés pestañear. En la pantalla, $ELONPEPE, una memecoin que compraste hace dos horas, está subiendo un 400%. Estás apalancado x50.',
     background: backgrounds.exchange,
     character: null,
     nextId: 'c1_01',
@@ -57,7 +57,7 @@ export const script: Record<string, ScriptNode> = {
     id: 'c1_01',
     chapter: 1,
     speaker: characters.protagonist,
-    text: '¡Mira esa vela verde! LunaSafeDoge acaba de subir un 45% en cinco minutos. Si pongo mis últimos 50,000 sats apalancado a 100x...',
+    text: '¡Es ahora o nunca! Si meto el resto de mis ahorros acá, en dos días me compro un descapotable. El análisis técnico no miente, mirá esa vela verde gigante...',
     background: backgrounds.exchange,
     character: 'nico',
     expression: 'happy',
@@ -67,49 +67,126 @@ export const script: Record<string, ScriptNode> = {
     id: 'c1_02',
     chapter: 1,
     speaker: characters.shitcoinBro,
-    text: '¡Es tu momento, bro! Si no te apalancas eres un cobarde. Ese token va directo a la luna. ¡Compra ya o quédate pobre para siempre!',
+    text: '¡Es tu momento, bro! Telegram destila euforia pura. ¡A la luna! ¡Todo el mundo va a renunciar a sus trabajos mañana! ¡Compra más o quédate pobre!',
     background: backgrounds.exchange,
     character: 'shitcoin_bro',
     expression: 'normal',
-    nextId: 'c1_choices_01',
+    nextId: 'c1_dec_1',
   },
-  c1_choices_01: {
-    id: 'c1_choices_01',
+  c1_dec_1: {
+    id: 'c1_dec_1',
     chapter: 1,
     speaker: characters.system,
-    text: '¿Qué debería hacer Nico en este momento crítico?',
+    text: '[Decisión 1] ¿Qué hacés con tu posición actual de $ELONPEPE?',
     background: backgrounds.exchange,
     character: null,
     choices: [
       {
-        text: '¡Entrar con todo! Apalancamiento 100x en LunaSafeDoge.',
-        nextId: 'c1_panic_enter',
-        effects: { shitcoinFomo: 10, sats: -50000 },
+        text: 'Asegurar ganancias. Cerrar el 50% de la posición y retirar la inversión inicial.',
+        nextId: 'c1_escena_1_2_safe',
+        effects: { sats: 20000, maxiScore: 5 },
       },
       {
-        text: 'Tengo dudas. El mercado parece inestable, mejor no operar ahora.',
-        nextId: 'c1_cautious',
-        effects: { maxiScore: 5 },
+        text: '¡Todo al rojo! Subir el apalancamiento a x100 e inyectar los últimos USDT para el alquiler.',
+        nextId: 'c1_escena_1_2_risky',
+        effects: { sats: -40000, shitcoinFomo: 10 },
       },
     ],
   },
-  
-  // Rama de pánico y liquidación
-  c1_panic_enter: {
-    id: 'c1_panic_enter',
+
+  // Escena 1.2
+  c1_escena_1_2_safe: {
+    id: 'c1_escena_1_2_safe',
+    chapter: 1,
+    speaker: characters.narrator,
+    text: 'Aseguras parte del capital, pero el precio empieza a titubear. La gran vela verde se detiene bruscamente. Aparece un mechazo rojo que absorbe la mitad de la última subida.',
+    background: backgrounds.exchange,
+    character: null,
+    nextId: 'c1_escena_1_2_common',
+  },
+  c1_escena_1_2_risky: {
+    id: 'c1_escena_1_2_risky',
+    chapter: 1,
+    speaker: characters.narrator,
+    text: '¡Aumentas el riesgo al límite! Justo en ese instante, el precio titubea. La vela verde se frena en seco y un violento mechazo rojo absorbe la subida. Estás al borde de la liquidación.',
+    background: backgrounds.exchange,
+    character: null,
+    nextId: 'c1_escena_1_2_common',
+  },
+  c1_escena_1_2_common: {
+    id: 'c1_escena_1_2_common',
+    chapter: 1,
+    speaker: characters.shitcoinBro,
+    text: '¡No se asusten, es solo una corrección saludable antes del próximo impulso! ¡Compren la caída! ¡Buy the dip, muchachos!',
+    background: backgrounds.exchange,
+    character: 'shitcoin_bro',
+    expression: 'normal',
+    nextId: 'c1_03_common',
+  },
+  c1_03_common: {
+    id: 'c1_03_common',
     chapter: 1,
     speaker: characters.protagonist,
-    text: '¡Listo! Compré con todo mi capital disponible. ¡¡A la luna!!',
+    text: 'Uf, se movió feo. Mi precio de liquidación quedó peligrosamente cerca si arriesgué de más...',
     background: backgrounds.exchange,
     character: 'nico',
-    expression: 'happy',
-    nextId: 'c1_minigame_exchange',
+    expression: 'concentrado',
+    nextId: 'c1_dec_2',
   },
-  c1_minigame_exchange: {
-    id: 'c1_minigame_exchange',
+  c1_dec_2: {
+    id: 'c1_dec_2',
     chapter: 1,
     speaker: characters.system,
-    text: '¡Alerta de mercado! LunaSafeDoge está experimentando una alta volatilidad extrema.',
+    text: '[Decisión 2] El mercado muestra volatilidad extrema. ¿Cómo reaccionás?',
+    background: backgrounds.exchange,
+    character: null,
+    choices: [
+      {
+        text: 'Ignorar el pánico, cerrar Telegram y confiar en un bot de trading que recomendó un desconocido.',
+        nextId: 'c1_escena_1_3_panic',
+        effects: { shitcoinFomo: 5 },
+      },
+      {
+        text: 'Poner un Stop-Loss estricto para proteger lo que queda, aunque signifique asumir una pequeña pérdida.',
+        nextId: 'c1_escena_1_3_stoploss',
+        effects: { maxiScore: 10 },
+      },
+    ],
+  },
+
+  // Escena 1.3: El Rugpull
+  c1_escena_1_3_panic: {
+    id: 'c1_escena_1_3_panic',
+    chapter: 1,
+    speaker: characters.narrator,
+    text: 'Decides no mirar. De repente, el monitor principal se congela por un segundo. La vela verde se transforma en una línea vertical roja que atraviesa el piso del gráfico.',
+    background: backgrounds.exchange,
+    character: null,
+    nextId: 'c1_rugpull_action',
+  },
+  c1_escena_1_3_stoploss: {
+    id: 'c1_escena_1_3_stoploss',
+    chapter: 1,
+    speaker: characters.narrator,
+    text: 'Tu Stop-Loss se activa salvando un remanente mínimo, pero la caída es tan rápida que el deslizamiento es brutal. El monitor parpadea mientras la vela verde se desploma a cero.',
+    background: backgrounds.exchange,
+    character: null,
+    nextId: 'c1_rugpull_action',
+  },
+  c1_rugpull_action: {
+    id: 'c1_rugpull_action',
+    chapter: 1,
+    speaker: characters.narrator,
+    text: 'El precio cae un 99.9% en tres segundos. La liquidez desapareció. Intentás vender, pero la interfaz del exchange tira: "Error: Price slippage too high". El Telegram ha sido eliminado.',
+    background: backgrounds.exchange,
+    character: null,
+    nextId: 'c1_rugpull_sim',
+  },
+  c1_rugpull_sim: {
+    id: 'c1_rugpull_sim',
+    chapter: 1,
+    speaker: characters.system,
+    text: 'ALERTA: Caída de liquidez del 99.99%. Liquidación de margen en proceso.',
     background: backgrounds.exchange,
     character: null,
     minigame: 'exchange',
@@ -117,104 +194,133 @@ export const script: Record<string, ScriptNode> = {
   c1_liquidation: {
     id: 'c1_liquidation',
     chapter: 1,
-    speaker: characters.narrator,
-    text: 'En un parpadeo, el gráfico se derrumbó un 99.9%. Ocurrió un rugpull masivo. La cuenta de Nico fue completamente liquidada.',
+    speaker: characters.protagonist,
+    text: 'No... no puede ser. Todo... se evaporó. ¡Los desarrolladores vendieron todo el pozo de liquidez! Me hicieron un rugpull en la cara...',
     background: backgrounds.exchange,
     character: 'nico',
     expression: 'panico',
-    nextId: 'c1_gameover_fomo',
+    nextId: 'c1_dec_3',
   },
-  c1_gameover_fomo: {
-    id: 'c1_gameover_fomo',
+  c1_dec_3: {
+    id: 'c1_dec_3',
+    chapter: 1,
+    speaker: characters.system,
+    text: '[Decisión 3] Estás en la ruina absoluta. El orgullo y la desesperación te carcomen. ¿Cuál es tu siguiente movimiento?',
+    background: backgrounds.exchange,
+    character: null,
+    choices: [
+      {
+        text: 'Buscar revancha inmediata. Invertir lo último de la tarjeta en una preventa llamada $SAFEGALAXY.',
+        nextId: 'c1_badending_1a',
+      },
+      {
+        text: 'Sentarte en el piso, respirar hondo, aceptar que perdiste y abrir un mail con un PDF titulado "bitcoin.pdf".',
+        nextId: 'c1_escena_1_4',
+        effects: { maxiScore: 20 },
+      },
+    ],
+  },
+
+  // BAD ENDING 1.A
+  c1_badending_1a: {
+    id: 'c1_badending_1a',
     chapter: 1,
     speaker: characters.narrator,
-    text: 'Te has quedado en bancarrota persiguiendo memecoins sin valor. Has caído en el abismo de las shitcoins.',
+    text: 'Depositás lo último que te quedaba en la tarjeta en $SAFEGALAXY. Dos horas después descubrís que el contrato inteligente tenía una línea maliciosa (Honeypot) que te impide retirar fondos para siempre.',
+    background: backgrounds.gameover,
+    character: 'nico',
+    expression: 'panico',
+    nextId: 'c1_gameover_1a_screen',
+  },
+  c1_gameover_1a_screen: {
+    id: 'c1_gameover_1a_screen',
+    chapter: 1,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 1.A: El casino cripto siempre gana si buscás dinero fácil. Reiniciá el capítulo y aprendé a no perseguir espejismos.',
     background: backgrounds.gameover,
     character: null,
     choices: [
       {
-        text: 'Reiniciar Capítulo 1 (Aprender de los errores)',
+        text: 'Reiniciar Capítulo 1',
         nextId: 'c1_start',
+        effects: { sats: 50000, maxiScore: -100 },
       }
-    ]
+    ],
   },
 
-  // Rama cautelosa
-  c1_cautious: {
-    id: 'c1_cautious',
+  // Escena 1.4: Epifanía
+  c1_escena_1_4: {
+    id: 'c1_escena_1_4',
+    chapter: 1,
+    speaker: characters.narrator,
+    text: 'Con los ojos cansados y el corazón latiendo despacio, abrís el archivo. Las primeras palabras dicen: "Bitcoin: A Peer-to-Peer Electronic Cash System". No hay fotos de perritos, solo criptografía y matemáticas.',
+    background: backgrounds.exchange,
+    character: null,
+    nextId: 'c1_escena_1_4_read',
+  },
+  c1_escena_1_4_read: {
+    id: 'c1_escena_1_4_read',
     chapter: 1,
     speaker: characters.protagonist,
-    text: 'No sé... esto tiene pinta de estafa. Mejor me quedo al margen y observo.',
+    text: 'Esto es... diferente. Es una propuesta para eliminar a los intermediarios de confianza de raíz. Interesante.',
     background: backgrounds.exchange,
     character: 'nico',
     expression: 'concentrado',
-    nextId: 'c1_crash_witness',
+    nextId: 'c1_dec_4',
   },
-  c1_crash_witness: {
-    id: 'c1_crash_witness',
+  c1_dec_4: {
+    id: 'c1_dec_4',
     chapter: 1,
-    speaker: characters.narrator,
-    text: 'De repente, las pantallas parpadean en rojo. El gráfico de LunaSafeDoge cae verticalmente a cero de forma instantánea. ¡Es un Rugpull!',
-    background: backgrounds.exchange,
-    character: 'nico',
-    expression: 'panico',
-    nextId: 'c1_cautious_02',
-  },
-  c1_cautious_02: {
-    id: 'c1_cautious_02',
-    chapter: 1,
-    speaker: characters.shitcoinBro,
-    text: 'No puede ser... ¡Mi portafolio! Se esfumó todo... ¡El creador del token borró su cuenta de Twitter!',
-    background: backgrounds.exchange,
-    character: 'shitcoin_bro',
-    expression: 'panico',
-    nextId: 'c1_cautious_03',
-  },
-  c1_cautious_03: {
-    id: 'c1_cautious_03',
-    chapter: 1,
-    speaker: characters.protagonist,
-    text: 'Uff... me salvé por poco. Esto es una locura. Todo este casino digital no tiene sentido. ¿Acaso no existe algo real en este ecosistema?',
-    background: backgrounds.exchange,
-    character: 'nico',
-    expression: 'concentrado',
-    nextId: 'c1_cautious_04',
-  },
-  c1_cautious_04: {
-    id: 'c1_cautious_04',
-    chapter: 1,
-    speaker: characters.narrator,
-    text: 'Buscando respuestas, Nico ignora las llamadas de su mentor de trading y abre un enlace que le envió un viejo desarrollador hace meses.',
+    speaker: characters.system,
+    text: '[Decisión 4] Empezás a leer las primeras secciones del documento de Satoshi Nakamoto. ¿Qué concepto investigas primero?',
     background: backgrounds.exchange,
     character: null,
-    nextId: 'c1_whitepaper_intro',
-  },
-  c1_whitepaper_intro: {
-    id: 'c1_whitepaper_intro',
-    chapter: 1,
-    speaker: characters.protagonist,
-    text: '¿"Bitcoin: Un Sistema de Efectivo Electrónico de Usuario a Usuario"? Escrito por un tal Satoshi Nakamoto... Veamos de qué se trata.',
-    background: backgrounds.exchange,
-    character: 'nico',
-    expression: 'normal',
-    nextId: 'c1_whitepaper_read',
-  },
-  c1_whitepaper_read: {
-    id: 'c1_whitepaper_read',
-    chapter: 1,
-    speaker: characters.narrator,
-    text: 'Nico empieza a leer. Las palabras sobre escasez matemática, firmas digitales y red peer-to-peer descentralizada resuenan en su cabeza mientras el cansancio lo vence y cae en un sueño profundo...',
-    background: backgrounds.exchange,
-    character: null,
-    nextId: 'c2_dream_start',
+    choices: [
+      {
+        text: 'El problema del doble gasto y cómo se resuelve de forma descentralizada sin un banco.',
+        nextId: 'c2_start',
+        effects: { maxiScore: 15 },
+      },
+      {
+        text: 'Saltear la teoría e intentar buscar el código en GitHub para minarlo en tu notebook vieja rápido.',
+        nextId: 'c1_badending_1b',
+      },
+    ],
   },
 
-  // --- CAPÍTULO 2 ---
-  c2_dream_start: {
-    id: 'c2_dream_start',
+  // BAD ENDING 1.B
+  c1_badending_1b: {
+    id: 'c1_badending_1b',
+    chapter: 1,
+    speaker: characters.narrator,
+    text: 'Intentás correr un nodo de minería en tu vieja laptop sin entender la dificultad de la red. La computadora se recalienta, el cooler hace ruido de turbina y la placa madre se quema por completo.',
+    background: backgrounds.gameover,
+    character: 'nico',
+    expression: 'panico',
+    nextId: 'c1_gameover_1b_screen',
+  },
+  c1_gameover_1b_screen: {
+    id: 'c1_gameover_1b_screen',
+    chapter: 1,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 1.B: Bitcoin no es un esquema para hacerte rico de la noche a la mañana. Requiere entendimiento técnico. Reiniciá el capítulo.',
+    background: backgrounds.gameover,
+    character: null,
+    choices: [
+      {
+        text: 'Reiniciar Capítulo 1',
+        nextId: 'c1_start',
+        effects: { sats: 50000, maxiScore: -100 },
+      }
+    ],
+  },
+
+  // --- CAPÍTULO 2: La Madriguera del Conejo ---
+  c2_start: {
+    id: 'c2_start',
     chapter: 2,
     speaker: characters.narrator,
-    text: 'Capítulo 2: La Madriguera del Conejo. Nico despierta en un espacio abstracto, bañado por una tenue luz azul. Frente a él, la imponente silueta de un programador oculto entre las sombras.',
+    text: 'Nico despierta en un entorno de ensueño surrealista. Flota en una biblioteca infinita donde los libros son bloques de piedra interconectados por cadenas de luz dorada. Al fondo, una silueta humana difuminada observa.',
     background: backgrounds.dream,
     character: null,
     nextId: 'c2_satoshi_01',
@@ -223,155 +329,225 @@ export const script: Record<string, ScriptNode> = {
     id: 'c2_satoshi_01',
     chapter: 2,
     speaker: characters.satoshi,
-    text: 'Bienvenido, Nico. Has estado buscando valor en los espejismos de la codicia, ignorando la verdadera revolución que se gesta en el código.',
+    text: 'Bienvenido, Nico. Has gastado mucha energía persiguiendo sombras en el mercado. Pero la verdadera revolución no es el precio; es la arquitectura de la confianza.',
     background: backgrounds.dream,
     character: 'satoshi',
     expression: 'misterioso',
     isSatoshiNode: true,
+    nextId: 'c2_nico_01',
+  },
+  c2_nico_01: {
+    id: 'c2_nico_01',
+    chapter: 2,
+    speaker: characters.protagonist,
+    text: 'Yo... solo quería libertad financiera. Pero lo perdí todo. ¿Por qué Bitcoin es diferente de todas esas shitcoins en el exchange?',
+    background: backgrounds.dream,
+    character: 'nico',
+    expression: 'concentrado',
     nextId: 'c2_satoshi_02',
   },
   c2_satoshi_02: {
     id: 'c2_satoshi_02',
     chapter: 2,
-    speaker: characters.protagonist,
-    text: '¿Eres... Satoshi? No entiendo. He perdido tanto tiempo y dinero. ¿Cómo se supone que Bitcoin es diferente de todas esas otras monedas?',
-    background: backgrounds.dream,
-    character: 'nico',
-    expression: 'concentrado',
-    nextId: 'c2_satoshi_03',
-  },
-  c2_satoshi_03: {
-    id: 'c2_satoshi_03',
-    chapter: 2,
     speaker: characters.satoshi,
-    text: 'El dinero fiat que usas se basa en la confianza de bancos centrales que han roto esa confianza una y otra vez mediante la inflación. Bitcoin elimina la necesidad de intermediarios mediante las matemáticas y la prueba de trabajo. Pero dime, ¿qué le da valor real a una moneda?',
+    text: 'Te pondré a prueba. Respóndeme con honestidad.',
     background: backgrounds.dream,
     character: 'satoshi',
     expression: 'misterioso',
     isSatoshiNode: true,
-    nextId: 'c2_choices_01',
+    nextId: 'c2_dec_5',
   },
-  c2_choices_01: {
-    id: 'c2_choices_01',
+  c2_dec_5: {
+    id: 'c2_dec_5',
     chapter: 2,
     speaker: characters.system,
-    text: 'Satoshi espera tu respuesta filosófica sobre el valor del dinero.',
+    text: '[Decisión 5] Satoshi pregunta: ¿Cuál es el verdadero enemigo que Bitcoin vino a combatir?',
     background: backgrounds.dream,
     character: null,
     choices: [
       {
-        text: 'La coerción del gobierno, la imposición fiscal y su estatus de curso legal.',
-        nextId: 'c2_wrong_answer_1',
+        text: 'La falta de tecnologías rápidas y blockchains con transacciones por segundo infinitas.',
+        nextId: 'c2_badending_2a',
       },
       {
-        text: 'Su escasez absoluta, la imposibilidad de censura, y la energía real que valida la red.',
-        nextId: 'c2_correct_answer_1',
-        effects: { maxiScore: 10 },
+        text: 'La necesidad de confiar en intermediarios que expanden la masa monetaria y confiscan el valor del trabajo mediante la inflación.',
+        nextId: 'c2_pow_scene',
+        effects: { maxiScore: 20 },
       },
     ],
   },
 
-  // Respuesta incorrecta 1 (Game Over)
-  c2_wrong_answer_1: {
-    id: 'c2_wrong_answer_1',
+  // BAD ENDING 2.A
+  c2_badending_2a: {
+    id: 'c2_badending_2a',
     chapter: 2,
     speaker: characters.satoshi,
-    text: 'Veo que sigues atrapado en los grilletes del viejo sistema. Si crees que el valor nace de la fuerza y el decreto, jamás entenderás la soberanía.',
+    text: 'No has entendido nada. Si sacrificás la descentralización por la velocidad, terminás construyendo un banco más eficiente, pero igual de propenso a la censura.',
     background: backgrounds.dream,
     character: 'satoshi',
     expression: 'misterioso',
     isSatoshiNode: true,
-    nextId: 'c2_gameover_fiat',
+    nextId: 'c2_gameover_2a_screen',
   },
-  c2_gameover_fiat: {
-    id: 'c2_gameover_fiat',
+  c2_gameover_2a_screen: {
+    id: 'c2_gameover_2a_screen',
     chapter: 2,
-    speaker: characters.narrator,
-    text: 'El sueño se transforma en una pesadilla inflacionaria. El banco central imprime billetes hasta que te ahogas en ellos. Game Over.',
+    speaker: characters.system,
+    text: '❌ BAD ENDING 2.A: La velocidad sin descentralización es solo una base de datos corporativa. Volvé a intentar.',
     background: backgrounds.gameover,
     character: null,
     choices: [
       {
-        text: 'Reiniciar Capítulo 2 (Volver a hablar con Satoshi)',
-        nextId: 'c2_dream_start',
+        text: 'Reiniciar Capítulo 2',
+        nextId: 'c2_start',
+        effects: { maxiScore: -50 },
       }
-    ]
+    ],
   },
 
-  // Respuesta correcta 1 -> Pregunta 2
-  c2_correct_answer_1: {
-    id: 'c2_correct_answer_1',
+  // Escena 2.2: Proof of Work
+  c2_pow_scene: {
+    id: 'c2_pow_scene',
+    chapter: 2,
+    speaker: characters.narrator,
+    text: 'Los bloques de piedra empiezan a brillar. Satoshi extiende su mano y un cubo de datos empieza a girar, requiriendo un esfuerzo computacional inmenso para mantenerse estable.',
+    background: backgrounds.dream,
+    character: null,
+    nextId: 'c2_pow_satoshi',
+  },
+  c2_pow_satoshi: {
+    id: 'c2_pow_satoshi',
     chapter: 2,
     speaker: characters.satoshi,
-    text: 'Correcto. La escasez física o matemática combinada con el trabajo es lo que nos previene de la devaluación. Ahora, si un gobernante te promete imprimir dinero ilimitado para "estimular la economía", ¿qué sucede en realidad?',
+    text: 'En el mundo digital inventé el "Proof of Work". Para escribir un bloque en la historia se debe consumir energía real. Une las leyes de la física con el software. ¿Qué pasa si alguien quiere alterar un bloque antiguo?',
     background: backgrounds.dream,
     character: 'satoshi',
     expression: 'misterioso',
     isSatoshiNode: true,
-    nextId: 'c2_choices_02',
+    nextId: 'c2_dec_6',
   },
-  c2_choices_02: {
-    id: 'c2_choices_02',
+  c2_dec_6: {
+    id: 'c2_dec_6',
     chapter: 2,
     speaker: characters.system,
-    text: 'Satoshi te interroga sobre los efectos de la inflación artificial.',
+    text: '[Decisión 6] ¿Cómo responde el protocolo ante un intento de modificar un registro histórico?',
     background: backgrounds.dream,
     character: null,
     choices: [
       {
-        text: 'Es un beneficio general porque hay más liquidez circulando para todos.',
-        nextId: 'c2_wrong_answer_2',
+        text: 'El atacante tendría que rehacer el trabajo de ese bloque y todos los siguientes, compitiendo contra toda la red honesta.',
+        nextId: 'c2_keys_scene',
+        effects: { maxiScore: 20 },
       },
       {
-        text: 'Se confisca el poder adquisitivo de los ahorradores y beneficia a quienes reciben el dinero primero (Efecto Cantillon).',
-        nextId: 'c2_correct_answer_2',
-        effects: { maxiScore: 15 },
+        text: 'La red detecta el fraude automáticamente mediante un sistema de votación por identidad de los usuarios registrados.',
+        nextId: 'c2_badending_2b',
       },
     ],
   },
 
-  // Respuesta incorrecta 2 (Game Over)
-  c2_wrong_answer_2: {
-    id: 'c2_wrong_answer_2',
+  // BAD ENDING 2.B
+  c2_badending_2b: {
+    id: 'c2_badending_2b',
     chapter: 2,
     speaker: characters.satoshi,
-    text: 'Lamentable. Sigues creyendo en la magia del dinero gratis. La riqueza se produce con trabajo e ingenio, no presionando un botón en un banco.',
+    text: 'En internet las identidades son baratas. Si dependiéramos de votación por cuentas, un atacante crearía millones de usuarios falsos (Ataque Sybil) y controlaría la red.',
     background: backgrounds.dream,
     character: 'satoshi',
     expression: 'misterioso',
     isSatoshiNode: true,
-    nextId: 'c2_gameover_fiat',
+    nextId: 'c2_gameover_2b_screen',
+  },
+  c2_gameover_2b_screen: {
+    id: 'c2_gameover_2b_screen',
+    chapter: 2,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 2.B: Un chip, un voto. El poder de cómputo real protege la red, no los perfiles virtuales. Reiniciá el capítulo.',
+    background: backgrounds.gameover,
+    character: null,
+    choices: [
+      {
+        text: 'Reiniciar Capítulo 2',
+        nextId: 'c2_start',
+        effects: { maxiScore: -50 },
+      }
+    ],
   },
 
-  // Respuesta correcta 2 -> Despertar Orange-pilled
-  c2_correct_answer_2: {
-    id: 'c2_correct_answer_2',
-    chapter: 2,
-    speaker: characters.satoshi,
-    text: 'Excelente, Nico. Has comprendido las leyes fundamentales de la economía sólida. Toma esta semilla. Guarda tus llaves privadas, sé soberano de tu propio valor.',
-    background: backgrounds.dream,
-    character: 'satoshi',
-    expression: 'misterioso',
-    isSatoshiNode: true,
-    nextId: 'c2_wake_up',
-  },
-  c2_wake_up: {
-    id: 'c2_wake_up',
+  // Escena 2.3: Llaves
+  c2_keys_scene: {
+    id: 'c2_keys_scene',
     chapter: 2,
     speaker: characters.narrator,
-    text: 'La silueta de Satoshi se desvanece en una deslumbrante luz dorada. Nico despierta sobresaltado en su escritorio. Las pantallas ya no muestran memecoins, sino la consola con el Whitepaper. Se siente diferente. Acaba de tomar la pastilla naranja.',
-    background: backgrounds.exchange,
-    character: 'nico',
-    expression: 'normal',
-    nextId: 'c3_cafe_start',
+    text: 'La silueta de Satoshi comienza a desvanecerse. Te extiende una caja de hierro fundido con un cerrojo intrincado y una llave de cristal brillante.',
+    background: backgrounds.dream,
+    character: null,
+    nextId: 'c2_keys_satoshi',
+  },
+  c2_keys_satoshi: {
+    id: 'c2_keys_satoshi',
+    chapter: 2,
+    speaker: characters.satoshi,
+    text: 'Este es tu nodo. Esta es tu soberanía. Pero recuerda: la libertad total conlleva una responsabilidad absoluta. Si dejas tus fondos en un exchange, el dinero no es tuyo. ¿Dónde guardarás tus llaves?',
+    background: backgrounds.dream,
+    character: 'satoshi',
+    expression: 'misterioso',
+    isSatoshiNode: true,
+    nextId: 'c2_dec_7',
+  },
+  c2_dec_7: {
+    id: 'c2_dec_7',
+    chapter: 2,
+    speaker: characters.system,
+    text: '[Decisión 7] Recibís tus primeros Satoshis. ¿Cómo decidís custodiarlos?',
+    background: backgrounds.dream,
+    character: null,
+    choices: [
+      {
+        text: 'Anotar la frase semilla de 12 palabras en un papel, guardarla físicamente y configurar una wallet no-custodia.',
+        nextId: 'c3_start',
+        effects: { maxiScore: 25, sats: 10000 },
+      },
+      {
+        text: 'Sacarle una foto a las 12 palabras con el celular y guardarla en Google Drive o enviártela por WhatsApp.',
+        nextId: 'c2_badending_2c',
+      },
+    ],
   },
 
-  // --- CAPÍTULO 3 ---
-  c3_cafe_start: {
-    id: 'c3_cafe_start',
+  // BAD ENDING 2.C
+  c2_badending_2c: {
+    id: 'c2_badending_2c',
+    chapter: 2,
+    speaker: characters.narrator,
+    text: 'Tres semanas después, un troyano básico accede a tu almacenamiento en la nube. Un bot automatizado escanea la foto de tus 12 palabras y vacía tu billetera en segundos.',
+    background: backgrounds.gameover,
+    character: 'nico',
+    expression: 'panico',
+    nextId: 'c2_gameover_2c_screen',
+  },
+  c2_gameover_2c_screen: {
+    id: 'c2_gameover_2c_screen',
+    chapter: 2,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 2.C: El almacenamiento digital de claves privadas es un regalo para los hackers. Not your keys, not your coins. Reiniciá.',
+    background: backgrounds.gameover,
+    character: null,
+    choices: [
+      {
+        text: 'Reiniciar Capítulo 2',
+        nextId: 'c2_start',
+        effects: { maxiScore: -50 },
+      }
+    ],
+  },
+
+  // --- CAPÍTULO 3: La Chispa de Lightning ---
+  c3_start: {
+    id: 'c3_start',
     chapter: 3,
     speaker: characters.narrator,
-    text: 'Capítulo 3: La Chispa de Lightning. Ha pasado el tiempo. Nico es ahora un bitcoiner convencido. Camina por la ciudad y decide comprar un café en una cafetería de especialidad que acepta Bitcoin.',
+    text: 'Una tarde soleada. Nico camina por una calle moderna con toques ciberpunk. Se detiene frente a una cafetería de especialidad con un cartel de neón: "Btc Accepted Here".',
     background: backgrounds.cafe,
     character: null,
     nextId: 'c3_01',
@@ -379,95 +555,152 @@ export const script: Record<string, ScriptNode> = {
   c3_01: {
     id: 'c3_01',
     chapter: 3,
-    speaker: characters.protagonist,
-    text: 'Hola, Valeria. Me gustaría un Espresso Doble y pagar con Bitcoin. Tengo mi billetera on-chain lista.',
+    speaker: characters.barista,
+    text: '¡Buenas! Serían un café de especialidad y un tostado. En total son 4,500 sats. ¿Pagás con Lightning o con la red principal (On-Chain)?',
     background: backgrounds.cafe,
-    character: 'nico',
+    character: 'barista',
     expression: 'normal',
     nextId: 'c3_02',
   },
   c3_02: {
     id: 'c3_02',
     chapter: 3,
-    speaker: characters.barista,
-    text: '¿On-chain? Oye, las comisiones de la red principal están en 45 sats/vB hoy por la congestión. Pagarías más de comisión que por el café, ¡y tendrías que esperar 10 minutos para la confirmación!',
+    speaker: characters.protagonist,
+    text: 'Eh... uso mi billetera principal. Dejame enviar la transacción desde la Capa 1.',
     background: backgrounds.cafe,
-    character: 'barista',
+    character: 'nico',
     expression: 'normal',
     nextId: 'c3_03',
   },
   c3_03: {
     id: 'c3_03',
     chapter: 3,
-    speaker: characters.protagonist,
-    text: '¿Eh? Pero Satoshi diseñó Bitcoin como efectivo electrónico. ¿Cómo puedo pagar cosas pequeñas del día a día de forma rápida y barata?',
+    speaker: characters.narrator,
+    text: 'Abrís tu billetera. La comisión de red actual es de 15,000 sats por congestión de la Mempool. Pagarías 3 veces más de lo que sale el café, y tardaría 10 minutos en confirmar.',
     background: backgrounds.cafe,
-    character: 'nico',
-    expression: 'concentrado',
+    character: null,
     nextId: 'c3_04',
   },
   c3_04: {
     id: 'c3_04',
     chapter: 3,
     speaker: characters.barista,
-    text: '¡Para eso está **Lightning Network**! Es una segunda capa. Creamos canales de pago y enviamos sats de forma instantánea con comisiones de fracción de centavo. Déjame generar un código QR y verás.',
+    text: 'Tranquilo, no vas a pagar eso por un café. Para eso usamos la Capa 2. Dejame que te explique cómo funciona Lightning Network.',
     background: backgrounds.cafe,
     character: 'barista',
     expression: 'happy',
-    nextId: 'c3_choices_01',
+    nextId: 'c3_dec_8',
   },
-  c3_choices_01: {
-    id: 'c3_choices_01',
+  c3_dec_8: {
+    id: 'c3_dec_8',
     chapter: 3,
     speaker: characters.system,
-    text: '¿Cómo debe reaccionar Nico para realizar su primer pago instantáneo?',
+    text: '[Decisión 8] El barista te explica los canales de pago. ¿Cómo definirías Lightning de forma simple?',
     background: backgrounds.cafe,
     character: null,
     choices: [
       {
-        text: 'Descargar una wallet de Lightning (ej. Phoenix/Alby), fondearla y escanear el QR.',
-        nextId: 'c3_wallet_sim',
-        effects: { maxiScore: 10 },
+        text: 'Una red de canales abiertos fuera de la cadena principal que realiza pagos instantáneos casi gratuitos y registra solo el balance final al cerrarse.',
+        nextId: 'c3_wallet_sim_intro',
+        effects: { maxiScore: 20 },
       },
       {
-        text: 'Insistir en pagar on-chain y esperar sentado en la barra.',
-        nextId: 'c3_onchain_fail',
+        text: 'Una nueva blockchain separada que emite un token rápido para cambiarlo por Bitcoin en un exchange interno.',
+        nextId: 'c3_badending_3a',
       },
     ],
   },
 
-  // Fallo on-chain
-  c3_onchain_fail: {
-    id: 'c3_onchain_fail',
+  // BAD ENDING 3.A
+  c3_badending_3a: {
+    id: 'c3_badending_3a',
     chapter: 3,
-    speaker: characters.narrator,
-    text: 'Nico envía la transacción on-chain pagando una comisión absurda de 25,000 sats. Pasan los minutos... el café se enfría. Valeria le informa que la transacción sigue sin confirmar en el mempool debido a la congestión.',
+    speaker: characters.barista,
+    text: 'No, no creamos tokens nuevos ni usamos otra blockchain. Eso destruiría la seguridad de Bitcoin.',
     background: backgrounds.cafe,
-    character: 'nico',
-    expression: 'panico',
-    nextId: 'c3_gameover_cold_coffee',
+    character: 'barista',
+    expression: 'normal',
+    nextId: 'c3_gameover_3a_screen',
   },
-  c3_gameover_cold_coffee: {
-    id: 'c3_gameover_cold_coffee',
+  c3_gameover_3a_screen: {
+    id: 'c3_gameover_3a_screen',
     chapter: 3,
-    speaker: characters.narrator,
-    text: 'Tu café se enfrió por completo y malgastaste tus sats en comisiones de red innecesarias por no usar capas de escalabilidad.',
+    speaker: characters.system,
+    text: '❌ BAD ENDING 3.A: Lightning es Bitcoin real viajando a la velocidad de la luz sobre canales inteligentes. Volvé a repasar el concepto.',
     background: backgrounds.gameover,
     character: null,
     choices: [
       {
-        text: 'Reiniciar Capítulo 3 (Aprender sobre Lightning)',
-        nextId: 'c3_cafe_start',
+        text: 'Reiniciar Capítulo 3',
+        nextId: 'c3_start',
+        effects: { maxiScore: -50 },
       }
-    ]
+    ],
   },
 
-  // Simulador de Wallet Lightning
+  // Escena 3.2: Wallet
+  c3_wallet_sim_intro: {
+    id: 'c3_wallet_sim_intro',
+    chapter: 3,
+    speaker: characters.narrator,
+    text: 'Valeria te muestra un código QR dinámico en una tablet. Tu interfaz cambia a la pantalla de una billetera móvil simulada.',
+    background: backgrounds.cafe,
+    character: null,
+    nextId: 'c3_dec_9',
+  },
+  c3_dec_9: {
+    id: 'c3_dec_9',
+    chapter: 3,
+    speaker: characters.system,
+    text: '[Decisión 9] Tenés la factura cargada en la billetera. ¿Qué paso debés verificar antes de confirmar?',
+    background: backgrounds.cafe,
+    character: null,
+    choices: [
+      {
+        text: 'Verificar que el monto en sats coincida con el precio del café y que empiece con "lnbc" (factura Lightning), luego confirmar.',
+        nextId: 'c3_wallet_sim',
+        effects: { maxiScore: 10 },
+      },
+      {
+        text: 'Copiar el texto de la factura y pegarlo en una dirección de Capa 1 de un Exchange centralizado para ver si te hacen descuento.',
+        nextId: 'c3_badending_3b',
+      },
+    ],
+  },
+
+  // BAD ENDING 3.B
+  c3_badending_3b: {
+    id: 'c3_badending_3b',
+    chapter: 3,
+    speaker: characters.narrator,
+    text: 'Intentás procesar una factura de Lightning en una red legacy de liquidación pesada. La interfaz tira error crítico e incompatible de protocolos.',
+    background: backgrounds.gameover,
+    character: 'nico',
+    expression: 'panico',
+    nextId: 'c3_gameover_3b_screen',
+  },
+  c3_gameover_3b_screen: {
+    id: 'c3_gameover_3b_screen',
+    chapter: 3,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 3.B: No mezcles Capa 1 pura con facturas Lightning fuera de canales activos. Reiniciá el pago.',
+    background: backgrounds.gameover,
+    character: null,
+    choices: [
+      {
+        text: 'Reiniciar Capítulo 3',
+        nextId: 'c3_start',
+        effects: { maxiScore: -50 },
+      }
+    ],
+  },
+
+  // Simulación
   c3_wallet_sim: {
     id: 'c3_wallet_sim',
     chapter: 3,
     speaker: characters.system,
-    text: 'Simulación de Billetera Lightning iniciada. Completa el pago escaneando el código QR generado por la cafetería.',
+    text: 'Simulando transacción Lightning... Confirma el pago de 4,500 sats.',
     background: backgrounds.cafe,
     character: null,
     minigame: 'wallet',
@@ -476,181 +709,265 @@ export const script: Record<string, ScriptNode> = {
     id: 'c3_wallet_success',
     chapter: 3,
     speaker: characters.barista,
-    text: '¡Listo! Me llegó el pago de 8,000 sats al instante. Aquí tienes tu café bien caliente. Es mágico, ¿verdad?',
+    text: '¡Listo! Pago de 4,500 sats recibido en menos de un segundo con 1 sat de comisión. Aquí tienes tu café caliente.',
     background: backgrounds.cafe,
     character: 'barista',
     expression: 'happy',
-    nextId: 'c3_after_payment',
+    nextId: 'c3_05',
   },
-  c3_after_payment: {
-    id: 'c3_after_payment',
+  c3_05: {
+    id: 'c3_05',
     chapter: 3,
     speaker: characters.protagonist,
-    text: 'Increíble... fue instantáneo y la comisión fue de apenas 1 sat. Esto realmente es el futuro del dinero diario.',
+    text: '¡Es increíble! Esto realmente es dinero en efectivo electrónico global. Es instantáneo.',
     background: backgrounds.cafe,
     character: 'nico',
     expression: 'happy',
-    nextId: 'c3_crypta_tip',
+    nextId: 'c3_06',
   },
-  c3_crypta_tip: {
-    id: 'c3_crypta_tip',
+  c3_06: {
+    id: 'c3_06',
     chapter: 3,
     speaker: characters.barista,
-    text: 'Totalmente. Si quieres conocer a la verdadera resistencia de programadores y bitcoiners en la ciudad, debes ir a **La Crypta**. Hoy hay una hackatón de desarrollo. Te paso la coordenada firmada con su llave pública.',
+    text: 'Ya estás listo. Si querés conocer a los verdaderos guardianes de la red, busca un callejón al norte con un farol tenue. Allí encontrarás la entrada a La Crypta, pero necesitarás resolver su acertijo.',
     background: backgrounds.cafe,
     character: 'barista',
     expression: 'normal',
-    nextId: 'c4_crypta_arrival',
+    nextId: 'c3_dec_10',
   },
-
-  // --- CAPÍTULO 4 ---
-  c4_crypta_arrival: {
-    id: 'c4_crypta_arrival',
-    chapter: 4,
-    speaker: characters.narrator,
-    text: 'Capítulo 4: La Puerta de La Crypta. Nico sigue las instrucciones y llega a un callejón oculto bajo luces de neón en Buenos Aires. Frente a él, una puerta de acero con una terminal inteligente parpadeante.',
-    background: backgrounds.cryptaDoor,
-    character: null,
-    nextId: 'c4_riddle_01',
-  },
-  c4_riddle_01: {
-    id: 'c4_riddle_01',
-    chapter: 4,
+  c3_dec_10: {
+    id: 'c3_dec_10',
+    chapter: 3,
     speaker: characters.system,
-    text: 'SISTEMA DE SEGURIDAD DE LA CRYPTA: Ingrese la respuesta correcta para abrir la compuerta. PREGUNTA 1: ¿Cuál es el límite absoluto de emisión de Bitcoin?',
-    background: backgrounds.cryptaDoor,
+    text: '[Decisión 10] Te preparás para el viaje hacia La Crypta. ¿Qué llevás con vos?',
+    background: backgrounds.cafe,
     character: null,
     choices: [
       {
-        text: '21,000,000 sats / monedas.',
-        nextId: 'c4_riddle_02',
+        text: 'Tus llaves privadas bien protegidas y una mente abierta lista para aprender de la comunidad.',
+        nextId: 'c4_start',
+        effects: { maxiScore: 25 },
       },
       {
-        text: 'No tiene límite, se emite de forma infinita para incentivar la minería.',
-        nextId: 'c4_wrong_riddle',
+        text: 'Un fajo de billetes de la moneda local devaluada para intentar impresionar a los Bitcoiners invitándoles una ronda.',
+        nextId: 'c3_badending_3c',
       },
     ],
   },
-  c4_wrong_riddle: {
-    id: 'c4_wrong_riddle',
-    chapter: 4,
-    speaker: characters.system,
-    text: 'ACCESO DENEGADO. Intruso detectado. Alarmas silenciosas activadas.',
-    background: backgrounds.cryptaDoor,
-    character: null,
-    nextId: 'c4_gameover_locked',
-  },
-  c4_gameover_locked: {
-    id: 'c4_gameover_locked',
-    chapter: 4,
+
+  // BAD ENDING 3.C
+  c3_badending_3c: {
+    id: 'c3_badending_3c',
+    chapter: 3,
     speaker: characters.narrator,
-    text: 'Has fallado la pregunta básica de Bitcoin. Las puertas de la comunidad permanecerán selladas para ti.',
+    text: 'Llegas a la zona pero intentás ostentar con papel devaluado. Los guardias te miran con lástima y te mandan de vuelta al banco más cercano.',
+    background: backgrounds.gameover,
+    character: 'nico',
+    expression: 'panico',
+    nextId: 'c3_gameover_3c_screen',
+  },
+  c3_gameover_3c_screen: {
+    id: 'c3_gameover_3c_screen',
+    chapter: 3,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 3.C: En los círculos soberanos, el papel fiat no tiene poder. Regresá con valor real.',
     background: backgrounds.gameover,
     character: null,
     choices: [
       {
-        text: 'Reiniciar Capítulo 4 (Intentar resolver el acertijo de nuevo)',
-        nextId: 'c4_crypta_arrival',
+        text: 'Reiniciar Capítulo 3',
+        nextId: 'c3_start',
+        effects: { maxiScore: -50 },
       }
-    ]
+    ],
   },
 
-  // Pregunta 2 de la puerta
-  c4_riddle_02: {
-    id: 'c4_riddle_02',
+  // --- CAPÍTULO 4: La Puerta de La Crypta ---
+  c4_start: {
+    id: 'c4_start',
+    chapter: 4,
+    speaker: characters.narrator,
+    text: 'Un callejón lluvioso y oscuro cyberpunk. Frente a vos hay una pesada puerta de hierro negro con remaches de bronce y un panel digital brillante con runas criptográficas.',
+    background: backgrounds.cryptaDoor,
+    character: null,
+    nextId: 'c4_01',
+  },
+  c4_01: {
+    id: 'c4_01',
     chapter: 4,
     speaker: characters.system,
-    text: 'PREGUNTA 2: ¿Qué tecnología permite la apertura de canales de pago bidireccionales fuera de la cadena para micropagos?',
+    text: 'Voz de la Puerta: "Deténte, viajero. Has aprendido las leyes de Satoshi. Demuestra que controlas tu soberanía. Resuelve el acertijo."',
+    background: backgrounds.cryptaDoor,
+    character: null,
+    nextId: 'c4_dec_11',
+  },
+  c4_dec_11: {
+    id: 'c4_dec_11',
+    chapter: 4,
+    speaker: characters.system,
+    text: '[Decisión 11] El panel muestra el desafío: "Para demostrar propiedad sin revelar tu secreto, ¿con qué debes firmar este mensaje digital generado por la puerta?"',
     background: backgrounds.cryptaDoor,
     character: null,
     choices: [
       {
-        text: 'Lightning Network (red de canales de pago)',
-        nextId: 'c4_crypta_open',
-        effects: { maxiScore: 10 },
+        text: 'Con mi Clave Pública (Public Key), ya que es la que todos conocen.',
+        nextId: 'c4_badending_4a',
       },
       {
-        text: 'Ethereum Virtual Machine (contratos inteligentes de Turing completo)',
-        nextId: 'c4_wrong_riddle',
+        text: 'Con mi Clave Privada (Private Key) de forma matemática interna para generar la firma válida, sin exponer la clave.',
+        nextId: 'c4_open',
+        effects: { maxiScore: 20 },
       },
     ],
   },
 
-  // Puerta abierta y final bueno
-  c4_crypta_open: {
-    id: 'c4_crypta_open',
+  // BAD ENDING 4.A
+  c4_badending_4a: {
+    id: 'c4_badending_4a',
     chapter: 4,
     speaker: characters.system,
-    text: 'ACCESO CONCEDIDO. Bienvenido a la zona de soberanía libre.',
+    text: 'Error: La clave pública verifica, pero no genera la prueba de autoría por sí misma. Acceso denegado. Bloqueo de 24 horas.',
     background: backgrounds.cryptaDoor,
     character: null,
-    nextId: 'c4_enter_bar',
+    nextId: 'c4_gameover_4a_screen',
   },
-  c4_enter_bar: {
-    id: 'c4_enter_bar',
+  c4_gameover_4a_screen: {
+    id: 'c4_gameover_4a_screen',
+    chapter: 4,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 4.A: La clave pública es tu dirección; la clave privada es tu firma. Repasá la criptografía asimétrica y reintenta.',
+    background: backgrounds.gameover,
+    character: null,
+    choices: [
+      {
+        text: 'Reiniciar Capítulo 4',
+        nextId: 'c4_start',
+        effects: { maxiScore: -50 },
+      }
+    ],
+  },
+
+  // Escena 4.2
+  c4_open: {
+    id: 'c4_open',
     chapter: 4,
     speaker: characters.narrator,
-    text: 'La compuerta se abre con un siseo neumático. Nico da un paso adelante y es recibido por un ambiente cyberpunk cálido y ruidoso. Hay música lofi de fondo, risas de desarrolladores y pantallas mostrando commits de código.',
+    text: 'La puerta de hierro empieza a girar con un sonido metálico pesado y satisfactorio. Se desliza dejando salir aire cálido con aroma a madera, café y malta.',
+    background: backgrounds.cryptaDoor,
+    character: null,
+    nextId: 'c4_dec_12',
+  },
+  c4_dec_12: {
+    id: 'c4_dec_12',
+    chapter: 4,
+    speaker: characters.system,
+    text: '[Decisión 12] Das el primer paso hacia el interior. ¿Cómo decidís presentarte?',
+    background: backgrounds.cryptaDoor,
+    character: null,
+    choices: [
+      {
+        text: 'Con humildad, buscando un lugar en la barra para escuchar a los constructores experimentados.',
+        nextId: 'c4_victory',
+        effects: { maxiScore: 30 },
+      },
+      {
+        text: 'Entrando a los gritos, contando cómo perdiste todo en memecoins para ver si te regalan satoshis por lástima.',
+        nextId: 'c4_badending_4b',
+      },
+    ],
+  },
+
+  // BAD ENDING 4.B
+  c4_badending_4b: {
+    id: 'c4_badending_4b',
+    chapter: 4,
+    speaker: characters.narrator,
+    text: 'Tu actitud disruptiva interrumpe la taberna. Un enorme guardia te toma del hombro con firmeza y te deposita en el callejón bajo la lluvia. "Acá venimos a construir, no a buscar caridad".',
+    background: backgrounds.gameover,
+    character: 'nico',
+    expression: 'panico',
+    nextId: 'c4_gameover_4b_screen',
+  },
+  c4_gameover_4b_screen: {
+    id: 'c4_gameover_4b_screen',
+    chapter: 4,
+    speaker: characters.system,
+    text: '❌ BAD ENDING 4.B: La Crypta premia el esfuerzo y la educación, no los lamentos del trading ludópata. Reiniciá el capítulo.',
+    background: backgrounds.gameover,
+    character: null,
+    choices: [
+      {
+        text: 'Reiniciar Capítulo 4',
+        nextId: 'c4_start',
+        effects: { maxiScore: -50 },
+      }
+    ],
+  },
+
+  // Victoria
+  c4_victory: {
+    id: 'c4_victory',
+    chapter: 4,
+    speaker: characters.narrator,
+    text: 'Caminás hacia el interior. Es una taberna cyberpunk acogedora con diagramas de bloques grabados en madera que brillan tenuemente. Detrás de la barra, el Gorila Rojo limpia vasos con una sonrisa complaciente.',
     background: backgrounds.cryptaInterior,
     character: null,
-    nextId: 'c4_gorilla_welcome',
+    nextId: 'c4_victory_scene_2',
   },
-  c4_gorilla_welcome: {
-    id: 'c4_gorilla_welcome',
+  c4_victory_scene_2: {
+    id: 'c4_victory_scene_2',
+    chapter: 4,
+    speaker: characters.narrator,
+    text: 'En una mesa rústica de la esquina, un capitán pirata con varias cervezas artesanales comparte una intensa charla con un oso gigante de su misma altura, que sostiene un termo amarillo y negro.',
+    background: backgrounds.cryptaInterior,
+    character: null,
+    nextId: 'c4_victory_gorilla',
+  },
+  c4_victory_gorilla: {
+    id: 'c4_victory_gorilla',
     chapter: 4,
     speaker: characters.gorilla,
-    text: '¡Epa! ¡Bienvenido a La Crypta, Nico! Te estábamos observando desde que dejaste atrás el fomo de las shitcoins.',
+    text: '¡Mirá quién decidió dejar los exchanges centralizados y terminar el viaje! Te estábamos esperando. El barista me avisó que completaste el circuito de Lightning a la perfección.',
     background: backgrounds.cryptaInterior,
     character: 'gorilla',
     expression: 'friendly',
-    nextId: 'c4_gorilla_talk_02',
+    nextId: 'c4_victory_nico',
   },
-  c4_gorilla_talk_02: {
-    id: 'c4_gorilla_talk_02',
-    chapter: 4,
-    speaker: characters.gorilla,
-    text: 'Aquí construimos el futuro sobre bases sólidas. En la barra, al fondo, puedes ver al Capitán Pirata con cervezas bien frías en la mano charlando con el Oso. Esos muchachos sí que saben debatir de canales Lightning.',
-    background: backgrounds.cryptaInterior,
-    character: 'gorilla',
-    expression: 'happy',
-    nextId: 'c4_gorilla_talk_03',
-  },
-  c4_gorilla_talk_03: {
-    id: 'c4_gorilla_talk_03',
+  c4_victory_nico: {
+    id: 'c4_victory_nico',
     chapter: 4,
     speaker: characters.protagonist,
-    text: '¡Wow! Esto es increíble. Es un honor estar aquí. Vengo a aprender y a aportar en la hackatón.',
+    text: 'Me costó... perdí mucho en el camino, pero finalmente entiendo de qué se trata todo esto. No es el precio en dólares. Es la red. Es la libertad.',
     background: backgrounds.cryptaInterior,
     character: 'nico',
     expression: 'happy',
-    nextId: 'c4_score_evaluation',
+    nextId: 'c4_victory_gorilla_offer',
   },
-  c4_score_evaluation: {
-    id: 'c4_score_evaluation',
+  c4_victory_gorilla_offer: {
+    id: 'c4_victory_gorilla_offer',
     chapter: 4,
     speaker: characters.gorilla,
-    text: '¡Esa es la actitud! Déjame ver cómo te fue en tu viaje de aprendizaje... Has demostrado ser un bitcoiner con convicción al evitar las trampas del fomo centralizado y dominar la Lightning Network.',
-    background: backgrounds.cryptaInterior,
-    character: 'gorilla',
-    expression: 'friendly',
-    nextId: 'c4_final_zap',
-  },
-  c4_final_zap: {
-    id: 'c4_final_zap',
-    chapter: 4,
-    speaker: characters.gorilla,
-    text: 'Toma, escanea este QR. Te invito tu primer mate o cerveza fría en La Crypta, pagada por Lightning. ¡Bienvenido a la resistencia, bitcoiner!',
+    text: 'Exactamente. Tomá, te preparé un mate con el agua a la temperatura justa, bien curado en madera, o si preferís, una cerveza bien helada. Ya está pagado. Sentate con los chicos, que acá es donde el verdadero trabajo empieza.',
     background: backgrounds.cryptaInterior,
     character: 'gorilla',
     expression: 'happy',
-    nextId: 'c4_credits',
+    nextId: 'c4_victory_final',
   },
-  c4_credits: {
-    id: 'c4_credits',
+  c4_victory_final: {
+    id: 'c4_victory_final',
     chapter: 4,
     speaker: characters.narrator,
-    text: 'Nico escanea el QR y siente por fin que forma parte de algo real y trascendente. La verdadera revolución no está en el casino digital, sino en construir un dinero libre. FIN DE LA AVENTURA.',
-    background: backgrounds.cryptaInterior,
+    text: 'Te sentás en la mesa junto al Pirata y el Oso. Sacás tu dispositivo, listo para empezar a colaborar. Por primera vez en meses, ya no sentís la ansiedad de mirar precios. Sos dueño de tu destino.',
+    background: backgrounds.victory,
+    character: null,
+    nextId: 'c4_victory_goodending_screen',
+  },
+  c4_victory_goodending_screen: {
+    id: 'c4_victory_goodending_screen',
+    chapter: 4,
+    speaker: characters.system,
+    text: '🏆 GOOD ENDING: Felicidades. Has completado "Camino a La Crypta". Has escapado del sistema fiat y de las estafas cripto. Ahora eres un Bitcoiner soberano. La revolución silenciosa continúa contigo.',
+    background: backgrounds.victory,
     character: null,
     nextId: 'game_finished_reset',
   },

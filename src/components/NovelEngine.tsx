@@ -13,11 +13,12 @@ interface NovelEngineProps {
 }
 
 export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
-  const [currentNodeId, setCurrentNodeId] = useState('c1_start');
-  const [sats, setSats] = useState(50000);
-  const [maxiScore, setMaxiScore] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
-  const audio = useAudio();
+    const [currentNodeId, setCurrentNodeId] = useState('c1_start');
+    const [sats, setSats] = useState(50000);
+    const [maxiScore, setMaxiScore] = useState(0);
+    const [shitcoinFomo, setShitcoinFomo] = useState(0);
+    const [isMuted, setIsMuted] = useState(false);
+    const audio = useAudio();
 
   const currentNode = script[currentNodeId] || script['c1_start'];
 
@@ -55,8 +56,20 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
   const handleChoiceSelect = (choice: Choice) => {
     // Apply stats effects
     if (choice.effects) {
-      if (choice.effects.sats) setSats(prev => prev + (choice.effects?.sats || 0));
-      if (choice.effects.maxiScore) setMaxiScore(prev => prev + (choice.effects?.maxiScore || 0));
+      if (choice.effects.sats !== undefined) {
+        if (choice.nextId === 'c1_start') setSats(50000);
+        else if (choice.nextId === 'c2_start') setSats(10000);
+        else if (choice.nextId === 'c3_start') setSats(10000);
+        else setSats(prev => Math.max(0, prev + (choice.effects?.sats || 0)));
+      }
+      if (choice.effects.maxiScore !== undefined) {
+        if (choice.nextId.includes('start') || choice.nextId.includes('arrival')) setMaxiScore(0);
+        else setMaxiScore(prev => Math.max(0, prev + (choice.effects?.maxiScore || 0)));
+      }
+      if (choice.effects.shitcoinFomo !== undefined) {
+        if (choice.nextId.includes('start') || choice.nextId.includes('arrival')) setShitcoinFomo(0);
+        else setShitcoinFomo(prev => Math.max(0, prev + (choice.effects?.shitcoinFomo || 0)));
+      }
     }
 
     // Play contextual sounds
@@ -80,7 +93,7 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
 
   const handleWalletComplete = (success: boolean) => {
     if (success) {
-      setSats(prev => prev - 8000);
+      setSats(prev => Math.max(0, prev - 4500)); // Coffee cost 4500 sats
       setCurrentNodeId('c3_wallet_success');
     }
   };
@@ -132,6 +145,22 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
           }}>
             <span style={{ color: 'var(--accent-cyan)' }}>💊 Orange Score:</span>
             <span>{maxiScore}</span>
+          </div>
+
+          <div style={{
+            background: 'rgba(10, 15, 30, 0.75)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '6px',
+            padding: '6px 12px',
+            fontSize: '0.85rem',
+            fontFamily: 'var(--font-mono)',
+            color: 'var(--text-light)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <span style={{ color: 'var(--accent-red)' }}>🔥 FOMO:</span>
+            <span>{shitcoinFomo}</span>
           </div>
         </div>
 
