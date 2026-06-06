@@ -10,15 +10,27 @@ import { useAudio } from '../hooks/useAudio';
 
 interface NovelEngineProps {
   onBackToMenu: () => void;
+  playerName: string;
+  gender: 'hombre' | 'mujer';
 }
 
-export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
+export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu, playerName, gender }) => {
     const [currentNodeId, setCurrentNodeId] = useState('c1_start');
     const [sats, setSats] = useState(50000);
     const [maxiScore, setMaxiScore] = useState(0);
     const [shitcoinFomo, setShitcoinFomo] = useState(0);
     const [isMuted, setIsMuted] = useState(false);
     const audio = useAudio();
+
+  const replacePlaceholders = (rawText: string) => {
+    if (!rawText) return '';
+    return rawText
+      .replace(/{playerName}/g, playerName)
+      .replace(/{o\/a}/g, gender === 'mujer' ? 'a' : 'o')
+      .replace(/{a\/o}/g, gender === 'mujer' ? 'a' : 'o')
+      .replace(/{el\/la}/g, gender === 'mujer' ? 'la' : 'el')
+      .replace(/{un\/una}/g, gender === 'mujer' ? 'una' : 'un');
+  };
 
   const currentNode = script[currentNodeId] || script['c1_start'];
 
@@ -225,7 +237,10 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
           {/* Choices selector */}
           {currentNode.choices && currentNode.choices.length > 0 && (
             <ChoiceOverlay
-              choices={currentNode.choices}
+              choices={currentNode.choices.map(c => ({
+                ...c,
+                text: replacePlaceholders(c.text)
+              }))}
               onSelect={handleChoiceSelect}
               isSatoshiNode={currentNode.isSatoshiNode}
             />
@@ -233,11 +248,12 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu }) => {
 
           {/* Dialogue text box at bottom */}
           <DialogBox
-            speaker={currentNode.speaker}
-            text={currentNode.text}
+            speaker={replacePlaceholders(currentNode.speaker)}
+            text={replacePlaceholders(currentNode.text)}
             character={currentNode.character}
             isSatoshiNode={currentNode.isSatoshiNode}
             onAdvance={handleAdvance}
+            gender={gender}
           />
         </>
       )}

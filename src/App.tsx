@@ -3,13 +3,20 @@ import { NovelEngine } from './components/NovelEngine';
 import { useAudio } from './hooks/useAudio';
 
 function App() {
-  const [screen, setScreen] = useState<'menu' | 'playing'>('menu');
+  const [screen, setScreen] = useState<'menu' | 'setup' | 'playing'>('menu');
+  const [playerName, setPlayerName] = useState('Nico');
+  const [gender, setGender] = useState<'hombre' | 'mujer'>('hombre');
   const audio = useAudio();
 
   const handleStartGame = () => {
     // Play start chime to initialize audio context securely on user gesture
     audio.playSuccess();
     setScreen('playing');
+  };
+
+  const handleGoToSetup = () => {
+    audio.playBeep(440, 0.08, 'sine');
+    setScreen('setup');
   };
 
   const handleBackToMenu = () => {
@@ -83,7 +90,7 @@ function App() {
 
           <button 
             className="menu-btn primary" 
-            onClick={handleStartGame}
+            onClick={handleGoToSetup}
             style={{
               padding: '16px 40px',
               fontSize: '1.1rem',
@@ -108,8 +115,204 @@ function App() {
         </div>
       )}
 
+      {screen === 'setup' && (
+        <div className="vn-frame screen-panel" style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '40px',
+          background: 'radial-gradient(circle, rgba(16,10,30,0.85) 0%, rgba(5,7,15,0.99) 100%)'
+        }}>
+          <h2 style={{
+            fontFamily: 'var(--font-mono)',
+            color: 'var(--accent-cyan)',
+            fontSize: '1.8rem',
+            marginBottom: '30px',
+            textShadow: '0 0 10px rgba(0, 240, 255, 0.8)',
+            letterSpacing: '2px'
+          }}>
+            CONFIGURA TU PERSONAJE
+          </h2>
+
+          <div style={{
+            width: '100%',
+            maxWidth: '500px',
+            background: 'rgba(10, 18, 38, 0.85)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '12px',
+            padding: '28px',
+            boxShadow: 'var(--glow-cyan)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+            marginBottom: '35px'
+          }}>
+            {/* Input Nombre */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <label style={{
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--text-muted)',
+                fontSize: '0.85rem',
+                letterSpacing: '2px',
+                textTransform: 'uppercase'
+              }}>
+                Nombre del Protagonista
+              </label>
+              <input 
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value.slice(0, 20))}
+                placeholder="Ingresa tu nombre..."
+                style={{
+                  background: 'rgba(5, 7, 15, 0.9)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '6px',
+                  padding: '12px 16px',
+                  color: 'white',
+                  fontSize: '1.05rem',
+                  fontFamily: 'var(--font-sans)',
+                  outline: 'none',
+                  transition: 'border-color 0.25s',
+                  width: '100%'
+                }}
+              />
+            </div>
+
+            {/* Selector de Sexo */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <label style={{
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--text-muted)',
+                fontSize: '0.85rem',
+                letterSpacing: '2px',
+                textTransform: 'uppercase'
+              }}>
+                Selecciona tu Sexo
+              </label>
+              
+              <div style={{ display: 'flex', gap: '20px', marginTop: '4px' }}>
+                {/* Option Hombre */}
+                <div 
+                  onClick={() => setGender('hombre')}
+                  style={{
+                    flex: 1,
+                    background: gender === 'hombre' ? 'rgba(0, 240, 255, 0.15)' : 'rgba(5, 7, 15, 0.6)',
+                    border: gender === 'hombre' ? '2px solid var(--accent-cyan)' : '1px solid rgba(255, 255, 255, 0.15)',
+                    borderRadius: '8px',
+                    padding: '16px 12px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '10px',
+                    transition: 'all 0.25s ease',
+                    boxShadow: gender === 'hombre' ? 'var(--glow-cyan)' : 'none'
+                  }}
+                >
+                  <div style={{
+                    width: '72px',
+                    height: '72px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: gender === 'hombre' ? '2.5px solid var(--accent-cyan)' : '1.5px solid rgba(255,255,255,0.2)',
+                    backgroundColor: '#04060f',
+                    transition: 'all 0.25s ease'
+                  }}>
+                    <img src="/avatar_nico.png" alt="Hombre" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    color: gender === 'hombre' ? 'var(--accent-cyan)' : 'var(--text-light)'
+                  }}>
+                    HOMBRE
+                  </span>
+                </div>
+
+                {/* Option Mujer */}
+                <div 
+                  onClick={() => setGender('mujer')}
+                  style={{
+                    flex: 1,
+                    background: gender === 'mujer' ? 'rgba(0, 240, 255, 0.15)' : 'rgba(5, 7, 15, 0.6)',
+                    border: gender === 'mujer' ? '2px solid var(--accent-cyan)' : '1px solid rgba(255, 255, 255, 0.15)',
+                    borderRadius: '8px',
+                    padding: '16px 12px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '10px',
+                    transition: 'all 0.25s ease',
+                    boxShadow: gender === 'mujer' ? 'var(--glow-cyan)' : 'none'
+                  }}
+                >
+                  <div style={{
+                    width: '72px',
+                    height: '72px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: gender === 'mujer' ? '2.5px solid var(--accent-cyan)' : '1.5px solid rgba(255,255,255,0.2)',
+                    backgroundColor: '#04060f',
+                    transition: 'all 0.25s ease'
+                  }}>
+                    <img src="/avatar_nico_female.png" alt="Mujer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    color: gender === 'mujer' ? 'var(--accent-cyan)' : 'var(--text-light)'
+                  }}>
+                    MUJER
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '20px' }}>
+            <button 
+              className="menu-btn" 
+              onClick={() => setScreen('menu')}
+              style={{
+                width: '160px',
+                borderColor: 'var(--accent-red)',
+                color: 'var(--accent-red)',
+                background: 'rgba(255, 0, 85, 0.05)',
+                margin: 0
+              }}
+            >
+              VOLVER
+            </button>
+            <button 
+              className="menu-btn primary" 
+              onClick={handleStartGame}
+              disabled={!playerName.trim()}
+              style={{
+                width: '240px',
+                boxShadow: 'var(--glow-btc)',
+                margin: 0,
+                opacity: playerName.trim() ? 1 : 0.5,
+                cursor: playerName.trim() ? 'pointer' : 'not-allowed'
+              }}
+            >
+              INICIAR AVENTURA ⚡
+            </button>
+          </div>
+        </div>
+      )}
+
       {screen === 'playing' && (
-        <NovelEngine onBackToMenu={handleBackToMenu} />
+        <NovelEngine 
+          onBackToMenu={handleBackToMenu} 
+          playerName={playerName.trim() || 'Nico'} 
+          gender={gender} 
+        />
       )}
     </div>
   );

@@ -7,20 +7,22 @@ interface DialogBoxProps {
   character?: string | null;
   isSatoshiNode?: boolean;
   onAdvance: () => void;
+  gender?: 'hombre' | 'mujer';
 }
 
-const getAvatarUrl = (charName: string) => {
+const getAvatarUrl = (charName: string, gender?: 'hombre' | 'mujer') => {
   switch (charName) {
-    case 'nico': return '/avatar_nico.png';
+    case 'nico': return gender === 'mujer' ? '/avatar_nico_female.png' : '/avatar_nico.png';
     case 'shitcoin_bro': return '/avatar_shitcoin_bro.png';
     case 'satoshi': return '/avatar_satoshi.png';
     case 'barista': return '/avatar_barista.png';
     case 'gorilla': return '/avatar_gorilla.png';
+    case 'pirate': return '/avatar_pirate.png';
     default: return null;
   }
 };
 
-export const DialogBox: React.FC<DialogBoxProps> = ({ speaker, text, character, isSatoshiNode, onAdvance }) => {
+export const DialogBox: React.FC<DialogBoxProps> = ({ speaker, text, character, isSatoshiNode, onAdvance, gender }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const audio = useAudio();
@@ -78,7 +80,7 @@ export const DialogBox: React.FC<DialogBoxProps> = ({ speaker, text, character, 
     }
   };
 
-  const avatarUrl = character ? getAvatarUrl(character) : null;
+  const avatarUrl = character ? getAvatarUrl(character, gender) : null;
 
   return (
     <div 
