@@ -2,6 +2,8 @@
 
 Una novela visual interactiva de anime japonés que narra la transformación de un "shitcoiner" arruinado en un bitcoiner soberano. 
 
+**⚡ ¡Juega la demo en vivo ahora mismo!** 👉 **[camino-crypta.vercel.app](https://camino-crypta.vercel.app/)**
+
 Acompaña a Nico, un joven trader atrapado en el frenesí del apalancamiento y el FOMO del casino digital, mientras choca de frente contra la realidad de un mercado manipulado. A lo largo de la historia, Nico deberá descender por la madriguera del conejo de Bitcoin, comprender los pilares de la escasez digital, dominar los micropagos instantáneos a través de la red Lightning y buscar el santuario secreto de desarrolladores: **La Crypta**.
 
 ---
