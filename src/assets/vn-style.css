@@ -514,8 +514,8 @@ body {
 }
 
 .title-screen {
-  background: linear-gradient(rgba(5, 7, 15, 0.6) 0%, rgba(5, 7, 15, 0.95) 100%), 
-              url('https://i.imgur.com/zYPto7C.png'); /* Fallback pattern */
+  background: linear-gradient(rgba(5, 7, 15, 0.4) 0%, rgba(5, 7, 15, 0.95) 100%), 
+              url('/bg_cover.png');
   background-size: cover;
   background-position: center;
 }

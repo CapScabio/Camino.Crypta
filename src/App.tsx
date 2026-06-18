@@ -73,8 +73,7 @@ function App() {
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          padding: '40px',
-          background: 'radial-gradient(circle, rgba(16,10,30,0.6) 0%, rgba(5,7,15,0.98) 100%)'
+          padding: '40px'
         }}>
           {/* Logo de La Crypta en el Medio */}
           <div style={{

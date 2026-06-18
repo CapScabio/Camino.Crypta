@@ -10,16 +10,26 @@ interface SceneScreenProps {
 // Background mapping to the high-quality generated PNGs
 const getBgUrl = (bgName: string) => {
   switch (bgName) {
-    case 'exchange_room':
+    case 'c1_bg':
       return '/bg_exchange.png';
-    case 'dream_satoshi':
+    case 'c2_bg':
       return '/bg_dream.png';
-    case 'coffee_shop':
+    case 'c3_bg':
+      return '/bg_chapter3.png';
+    case 'c4_bg':
+      return '/bg_chapter4.png';
+    case 'c5_bg':
+      return '/bg_chapter5.png';
+    case 'c6_bg':
       return '/bg_cafe.png';
-    case 'la_crypta_door':
-      return '/bg_crypta_door.png';
-    case 'la_crypta_interior':
-      return '/bg_crypta_interior.png';
+    case 'c7_bg':
+      return '/bg_chapter7.png';
+    case 'c8_bg':
+      return '/bg_chapter8.png';
+    case 'c9_bg':
+      return '/bg_chapter9.png';
+    case 'c10_bg':
+      return '/bg_chapter10.png';
     case 'game_over_scene':
       return '/bg_gameover.png';
     case 'victory_scene':
