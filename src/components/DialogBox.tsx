@@ -18,6 +18,8 @@ const getAvatarUrl = (charName: string, gender?: 'hombre' | 'mujer') => {
     case 'barista': return '/avatar_barista.png';
     case 'gorilla': return '/avatar_gorilla.png';
     case 'pirate': return '/avatar_pirate.png';
+    case 'yaguar': return '/avatar_yaguar.png';
+    case 'negro': return '/avatar_negro.png';
     default: return null;
   }
 };

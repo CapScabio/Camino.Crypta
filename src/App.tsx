@@ -6,9 +6,16 @@ function App() {
   const [screen, setScreen] = useState<'menu' | 'setup' | 'playing'>('menu');
   const [playerName, setPlayerName] = useState('Nico');
   const [gender, setGender] = useState<'hombre' | 'mujer'>('hombre');
+  const [npub, setNpub] = useState('');
+  const [nsec, setNsec] = useState('');
   const audio = useAudio();
 
   const handleStartGame = () => {
+    if (!npub) {
+      audio.playError();
+      alert('Debes conectarte con Nostr (extensión o llave generada) para guardar tu partida y badges.');
+      return;
+    }
     // Play start chime to initialize audio context securely on user gesture
     audio.playSuccess();
     setScreen('playing');
@@ -22,6 +29,39 @@ function App() {
   const handleBackToMenu = () => {
     audio.playBeep(330, 0.08, 'sine');
     setScreen('menu');
+  };
+
+  const handleNIP07Connect = async () => {
+    if ((window as any).nostr) {
+      try {
+        const hexPub = await (window as any).nostr.getPublicKey();
+        const npubSim = `npub1${hexPub.slice(0, 8)}...${hexPub.slice(-8)}`;
+        setNpub(npubSim);
+        setNsec('Extensión NIP-07 protegida');
+        audio.playSuccess();
+      } catch (e) {
+        console.error(e);
+        audio.playError();
+      }
+    } else {
+      audio.playError();
+      alert('No se detectó ninguna extensión de Nostr (como Alby, Nos2x, etc.). Por favor, genera llaves efímeras para continuar.');
+    }
+  };
+
+  const handleGenerateKeys = () => {
+    const chars = '0123456789abcdef';
+    let hexPriv = '';
+    let hexPub = '';
+    for (let i = 0; i < 64; i++) {
+      hexPriv += chars[Math.floor(Math.random() * 16)];
+      hexPub += chars[Math.floor(Math.random() * 16)];
+    }
+    const simulatedNpub = `npub1${hexPub.slice(0, 8)}...${hexPub.slice(-8)}`;
+    const simulatedNsec = `nsec1${hexPriv.slice(0, 8)}...${hexPriv.slice(-8)}`;
+    setNpub(simulatedNpub);
+    setNsec(simulatedNsec);
+    audio.playSuccess();
   };
 
   return (
@@ -121,14 +161,15 @@ function App() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '40px',
-          background: 'radial-gradient(circle, rgba(16,10,30,0.85) 0%, rgba(5,7,15,0.99) 100%)'
+          padding: '20px 40px',
+          background: 'radial-gradient(circle, rgba(16,10,30,0.85) 0%, rgba(5,7,15,0.99) 100%)',
+          overflowY: 'auto'
         }}>
           <h2 style={{
             fontFamily: 'var(--font-mono)',
             color: 'var(--accent-cyan)',
-            fontSize: '1.8rem',
-            marginBottom: '30px',
+            fontSize: '1.6rem',
+            marginBottom: '20px',
             textShadow: '0 0 10px rgba(0, 240, 255, 0.8)',
             letterSpacing: '2px'
           }}>
@@ -141,19 +182,19 @@ function App() {
             background: 'rgba(10, 18, 38, 0.85)',
             border: '1px solid var(--border-color)',
             borderRadius: '12px',
-            padding: '28px',
+            padding: '24px',
             boxShadow: 'var(--glow-cyan)',
             display: 'flex',
             flexDirection: 'column',
-            gap: '24px',
-            marginBottom: '35px'
+            gap: '20px',
+            marginBottom: '25px'
           }}>
             {/* Input Nombre */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <label style={{
                 fontFamily: 'var(--font-mono)',
                 color: 'var(--text-muted)',
-                fontSize: '0.85rem',
+                fontSize: '0.8rem',
                 letterSpacing: '2px',
                 textTransform: 'uppercase'
               }}>
@@ -168,9 +209,9 @@ function App() {
                   background: 'rgba(5, 7, 15, 0.9)',
                   border: '1px solid var(--border-color)',
                   borderRadius: '6px',
-                  padding: '12px 16px',
+                  padding: '10px 14px',
                   color: 'white',
-                  fontSize: '1.05rem',
+                  fontSize: '1rem',
                   fontFamily: 'var(--font-sans)',
                   outline: 'none',
                   transition: 'border-color 0.25s',
@@ -180,18 +221,18 @@ function App() {
             </div>
 
             {/* Selector de Sexo */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <label style={{
                 fontFamily: 'var(--font-mono)',
                 color: 'var(--text-muted)',
-                fontSize: '0.85rem',
+                fontSize: '0.8rem',
                 letterSpacing: '2px',
                 textTransform: 'uppercase'
               }}>
                 Selecciona tu Sexo
               </label>
               
-              <div style={{ display: 'flex', gap: '20px', marginTop: '4px' }}>
+              <div style={{ display: 'flex', gap: '16px', marginTop: '4px' }}>
                 {/* Option Hombre */}
                 <div 
                   onClick={() => setGender('hombre')}
@@ -200,22 +241,22 @@ function App() {
                     background: gender === 'hombre' ? 'rgba(0, 240, 255, 0.15)' : 'rgba(5, 7, 15, 0.6)',
                     border: gender === 'hombre' ? '2px solid var(--accent-cyan)' : '1px solid rgba(255, 255, 255, 0.15)',
                     borderRadius: '8px',
-                    padding: '16px 12px',
+                    padding: '12px 8px',
                     cursor: 'pointer',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '10px',
+                    gap: '8px',
                     transition: 'all 0.25s ease',
                     boxShadow: gender === 'hombre' ? 'var(--glow-cyan)' : 'none'
                   }}
                 >
                   <div style={{
-                    width: '72px',
-                    height: '72px',
+                    width: '56px',
+                    height: '56px',
                     borderRadius: '50%',
                     overflow: 'hidden',
-                    border: gender === 'hombre' ? '2.5px solid var(--accent-cyan)' : '1.5px solid rgba(255,255,255,0.2)',
+                    border: gender === 'hombre' ? '2px solid var(--accent-cyan)' : '1.5px solid rgba(255,255,255,0.2)',
                     backgroundColor: '#04060f',
                     transition: 'all 0.25s ease'
                   }}>
@@ -223,7 +264,7 @@ function App() {
                   </div>
                   <span style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: '0.9rem',
+                    fontSize: '0.8rem',
                     fontWeight: 'bold',
                     letterSpacing: '1px',
                     color: gender === 'hombre' ? 'var(--accent-cyan)' : 'var(--text-light)'
@@ -240,22 +281,22 @@ function App() {
                     background: gender === 'mujer' ? 'rgba(0, 240, 255, 0.15)' : 'rgba(5, 7, 15, 0.6)',
                     border: gender === 'mujer' ? '2px solid var(--accent-cyan)' : '1px solid rgba(255, 255, 255, 0.15)',
                     borderRadius: '8px',
-                    padding: '16px 12px',
+                    padding: '12px 8px',
                     cursor: 'pointer',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '10px',
+                    gap: '8px',
                     transition: 'all 0.25s ease',
                     boxShadow: gender === 'mujer' ? 'var(--glow-cyan)' : 'none'
                   }}
                 >
                   <div style={{
-                    width: '72px',
-                    height: '72px',
+                    width: '56px',
+                    height: '56px',
                     borderRadius: '50%',
                     overflow: 'hidden',
-                    border: gender === 'mujer' ? '2.5px solid var(--accent-cyan)' : '1.5px solid rgba(255,255,255,0.2)',
+                    border: gender === 'mujer' ? '2px solid var(--accent-cyan)' : '1.5px solid rgba(255,255,255,0.2)',
                     backgroundColor: '#04060f',
                     transition: 'all 0.25s ease'
                   }}>
@@ -263,7 +304,7 @@ function App() {
                   </div>
                   <span style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: '0.9rem',
+                    fontSize: '0.8rem',
                     fontWeight: 'bold',
                     letterSpacing: '1px',
                     color: gender === 'mujer' ? 'var(--accent-cyan)' : 'var(--text-light)'
@@ -271,6 +312,116 @@ function App() {
                     MUJER
                   </span>
                 </div>
+              </div>
+            </div>
+
+            {/* Nostr Login Section */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <label style={{
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--text-muted)',
+                fontSize: '0.8rem',
+                letterSpacing: '2px',
+                textTransform: 'uppercase'
+              }}>
+                Identidad Digital (Nostr)
+              </label>
+
+              <div style={{
+                background: 'rgba(5, 7, 15, 0.9)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '6px',
+                padding: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}>
+                {npub ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '1.2rem' }}>🔑</span>
+                      <span style={{
+                        color: 'var(--accent-green)',
+                        fontSize: '0.85rem',
+                        fontFamily: 'var(--font-mono)',
+                        wordBreak: 'break-all'
+                      }}>
+                        Conectado: {npub}
+                      </span>
+                    </div>
+                    {nsec && nsec !== 'Extensión NIP-07 protegida' && (
+                      <div style={{
+                        color: 'rgba(255, 255, 255, 0.4)',
+                        fontSize: '0.75rem',
+                        fontFamily: 'var(--font-mono)',
+                        wordBreak: 'break-all'
+                      }}>
+                        Clave privada (simulada): {nsec}
+                      </div>
+                    )}
+                    <button
+                      onClick={() => { setNpub(''); setNsec(''); }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--accent-red)',
+                        cursor: 'pointer',
+                        fontSize: '0.8rem',
+                        fontFamily: 'var(--font-mono)',
+                        textAlign: 'left',
+                        padding: 0,
+                        marginTop: '4px',
+                        textDecoration: 'underline'
+                      }}
+                    >
+                      [Desconectar clave]
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <button
+                      onClick={handleNIP07Connect}
+                      className="menu-btn"
+                      style={{
+                        width: '100%',
+                        fontSize: '0.85rem',
+                        borderColor: 'var(--accent-cyan)',
+                        background: 'rgba(0, 240, 255, 0.05)',
+                        margin: 0,
+                        padding: '10px'
+                      }}
+                    >
+                      💜 Conectar con Extensión (NIP-07)
+                    </button>
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      justifyContent: 'center',
+                      fontSize: '0.75rem',
+                      color: 'var(--text-muted)',
+                      fontFamily: 'var(--font-mono)'
+                    }}>
+                      — O TAMBIÉN —
+                    </div>
+
+                    <button
+                      onClick={handleGenerateKeys}
+                      className="menu-btn"
+                      style={{
+                        width: '100%',
+                        fontSize: '0.85rem',
+                        borderColor: 'var(--accent-btc)',
+                        background: 'rgba(247, 147, 26, 0.05)',
+                        margin: 0,
+                        padding: '10px'
+                      }}
+                    >
+                      ⚡ Generar Identidad Rápida (Efímera)
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -292,13 +443,13 @@ function App() {
             <button 
               className="menu-btn primary" 
               onClick={handleStartGame}
-              disabled={!playerName.trim()}
+              disabled={!playerName.trim() || !npub}
               style={{
                 width: '240px',
                 boxShadow: 'var(--glow-btc)',
                 margin: 0,
-                opacity: playerName.trim() ? 1 : 0.5,
-                cursor: playerName.trim() ? 'pointer' : 'not-allowed'
+                opacity: (playerName.trim() && npub) ? 1 : 0.5,
+                cursor: (playerName.trim() && npub) ? 'pointer' : 'not-allowed'
               }}
             >
               INICIAR AVENTURA ⚡
@@ -312,6 +463,8 @@ function App() {
           onBackToMenu={handleBackToMenu} 
           playerName={playerName.trim() || 'Nico'} 
           gender={gender} 
+          npub={npub}
+          nsec={nsec}
         />
       )}
     </div>
