@@ -299,7 +299,7 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu, playerNa
         ['trading_score', tradingScore.toString()],
         ['route', badgeInfo.route],
         ['badge_type', badgeInfo.title],
-        ['zaps_address', 'yawninghood99@walletofsatoshi.com']
+        ['zaps_address', 'sweetseahorse11@primal.net']
       ],
       content: `¡Logro desbloqueado! Completé la novela visual Camino a La Crypta. Clasificación: ${badgeInfo.title}. #Bitcoin #Nostr #LaCrypta`,
       sig: mockSig
@@ -750,7 +750,7 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu, playerNa
                   flexShrink: 0
                 }}>
                   <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=lightning:yawninghood99@walletofsatoshi.com"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=lightning:sweetseahorse11@primal.net"
                     alt="Zap QR Code"
                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                   />
@@ -775,12 +775,12 @@ export const NovelEngine: React.FC<NovelEngineProps> = ({ onBackToMenu, playerNa
                     color: '#fff',
                     wordBreak: 'break-all'
                   }}>
-                    <span>yawninghood99@walletofsatoshi.com</span>
+                    <span>sweetseahorse11@primal.net</span>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText('yawninghood99@walletofsatoshi.com');
+                        navigator.clipboard.writeText('sweetseahorse11@primal.net');
                         audio.playBeep(880, 0.05, 'sine');
-                        alert('Copiado yawninghood99@walletofsatoshi.com');
+                        alert('Copiado sweetseahorse11@primal.net');
                       }}
                       style={{
                         background: 'none',
